@@ -9,7 +9,7 @@ HyperLogLog
 See http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf
 
 Example:
-``java
+```java
 HyperLogLog hll = new HyperLogLog();
 int elements = 100000;
 for (int i = 0; i < elements; i++) {
