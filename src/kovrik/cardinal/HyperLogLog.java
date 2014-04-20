@@ -1,5 +1,8 @@
 package kovrik.cardinal;
 
+import kovrik.cardinal.interfaces.Cardinal;
+import kovrik.cardinal.interfaces.Registers;
+
 /**
  * Cardinality estimator.
  * Basic HyperLogLog implementation.
@@ -58,7 +61,7 @@ public final class HyperLogLog implements Cardinal {
     private static final int M = (1 << INDEX_BITS); // m = 2^b : number of registers
     private static final double ALPHA_MM = getAlphaMM(); // alpha * m * m
 
-    private final RegisterSet registers = new RegisterSet(M);
+    private final Registers registers = new RegisterSet(M);
 
     /**
      * Count object
@@ -136,14 +139,14 @@ public final class HyperLogLog implements Cardinal {
         if (other.size() != this.size()) {
             throw new IllegalArgumentException("Merging failed: sizes must be equal!");
         }
-        for (int i = 0; i < other.size(); i++) {
+        for (int i = 0; i < other.getRegisters().size(); i++) {
             this.registers.set(i, Math.max(this.registers.get(i),
                                            other.getRegisters().get(i)));
         }
     }
 
     @Override
-    public RegisterSet getRegisters() {
+    public Registers getRegisters() {
         return this.registers;
     }
 

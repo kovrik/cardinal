@@ -1,5 +1,7 @@
 package kovrik.cardinal;
 
+import kovrik.cardinal.interfaces.Registers;
+
 import java.util.Arrays;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Arrays;
 /** TODO:
  * - add interface
  */
-public class RegisterSet {
+public class RegisterSet implements Registers {
 
     private final int[] registers;
 
@@ -17,16 +19,19 @@ public class RegisterSet {
         this.registers = new int[numberOfRegisters];
     }
 
+    @Override
     public int get(int index) {
         return registers[index];
     }
 
+    @Override
     public void set(int index, int value) {
         registers[index] = value;
     }
 
-    public int[] registers() {
-        return registers;
+    @Override
+    public int size() {
+        return registers.length;
     }
 
     @Override

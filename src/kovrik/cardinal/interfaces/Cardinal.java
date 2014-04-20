@@ -1,7 +1,9 @@
-package kovrik.cardinal;
+package kovrik.cardinal.interfaces;
 
+/**
+ * Common cardinality estimator interface.
+ */
 public interface Cardinal {
-
     /**
      * Add object.
      * @param o
@@ -39,5 +41,5 @@ public interface Cardinal {
     /**
      * Return inner data representation.
      */
-    RegisterSet getRegisters();
+    Registers getRegisters();
 }
