@@ -15,9 +15,7 @@ import kovrik.cardinal.interfaces.Registers;
 
 /**
  * TODO:
- * - FIXME check accuracy
  * - variable params
- * - merging
  **/
 public final class HyperLogLog implements Cardinal {
     /**
