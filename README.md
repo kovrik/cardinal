@@ -27,6 +27,5 @@ TODO
 =====
 - Add Murmur hashing
 - implement concurrent version
-- implement LogLog
 - implement HyperLogLog++ (see [HyperLogLog in Practice: Algorithmic Engineering of a State of The Art Cardinality Estimation Algorithm](http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/pubs/archive/40671.pdf))
 - Optimize and clean code
