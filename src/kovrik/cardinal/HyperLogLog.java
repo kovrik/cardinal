@@ -15,7 +15,7 @@ package kovrik.cardinal;
  * - variable params
  * - merging
  **/
-public final class HyperLogLog {
+public final class HyperLogLog implements Cardinal {
     /**
      * i.e. we have the number
      * n = 162302747
@@ -60,14 +60,11 @@ public final class HyperLogLog {
 
     private final RegisterSet registers = new RegisterSet(M);
 
-    public static void main(String[] args) {
-        System.out.println(getValue(162302747));
-    }
-
     /**
      * Count object
      * @param o
      */
+    @Override
     public void add(Object o) {
         if (o == null) {
             return;
@@ -82,6 +79,7 @@ public final class HyperLogLog {
      * Estimate cardinality
      * @return
      */
+    @Override
     public double cardinality() {
         double est;
 
@@ -100,7 +98,7 @@ public final class HyperLogLog {
         if (e <= (5.0 / 2.0) * M) {
             // small range correction
             if (zeros != 0) {
-                est =  Math.round(M * Math.log(M / zeros));
+                est =  Math.round(M * Util.linearCounting(M, zeros));
             } else {
                 est = e;
             }
@@ -112,6 +110,56 @@ public final class HyperLogLog {
             est = -(1L << 32) * (Math.log(1.0 - (e / (1L << 32))));  /* Beware of NaNs ! */
         }
         return est;
+    }
+
+    /**
+     * Return number of registers
+     * @return
+     */
+    @Override
+    public int size() {
+        return M;
+    }
+
+    /**
+     * Merge results with another estimator.
+     * @param other
+     */
+    @Override
+    public void merge(Cardinal other) {
+        if (other == null) {
+            throw new IllegalArgumentException("Merging failed: cannot merge with null estimator!");
+        }
+        if (other.getRegisters() == null) {
+            throw new IllegalArgumentException("Merging failed: cannot merge with null registers!");
+        }
+        if (other.size() != this.size()) {
+            throw new IllegalArgumentException("Merging failed: sizes must be equal!");
+        }
+        for (int i = 0; i < other.size(); i++) {
+            this.registers.set(i, Math.max(this.registers.get(i),
+                                           other.getRegisters().get(i)));
+        }
+    }
+
+    @Override
+    public RegisterSet getRegisters() {
+        return this.registers;
+    }
+
+    /**
+     * Return standard error (accuracy).
+     * Formula is:
+     *
+     * 1.04 / sqrt(m)
+     *
+     * where m - is a number of registers
+     *
+     * @return
+     */
+    @Override
+    public double standardError() {
+        return 1.04 / Math.sqrt(M);
     }
 
     /**
@@ -144,7 +192,7 @@ public final class HyperLogLog {
      * @return
      */
     private static int getIndex(int hash) {
-        return extractBits(hash, INDEX_BITS, 0);
+        return Util.extractBits(hash, INDEX_BITS, 0);
     }
 
     /**
@@ -156,42 +204,7 @@ public final class HyperLogLog {
         if (hash == 0) {
             return VALUE_BITS;
         }
-        return Integer.numberOfLeadingZeros(extractBits(hash >>> INDEX_BITS, VALUE_BITS, 0)) - (Integer.SIZE - VALUE_BITS);
-    }
-
-    /**
-     * Return `nrBits` bits of `l` starting from `offset`
-     * @param l
-     * @param nrBits
-     * @param offset
-     * @return
-     */
-    private static int extractBits(int l, int nrBits, int offset) {
-        final int rightShifted = l >>> offset;
-        final int mask = (1 << nrBits) - 1;
-        return rightShifted & mask;
-    }
-
-    /**
-     * Return number of registers
-     * @return
-     */
-    public int numberOfRegisters() {
-        return M;
-    }
-
-    /**
-     * Return standard error (accuracy).
-     * Formula is:
-     *
-     * 1.04 / sqrt(m)
-     *
-     * where m - is a number of registers
-     *
-     * @return
-     */
-    public double standardError() {
-        return 1.04 / Math.sqrt(M);
+        return Integer.numberOfLeadingZeros(Util.extractBits(hash >>> INDEX_BITS, VALUE_BITS, 0)) - (Integer.SIZE - VALUE_BITS);
     }
 
     @Override

@@ -23,3 +23,8 @@ double epsilon = (1.0 - (cardinality / elements)) * 100;
 System.out.println("Epsilon: " + epsilon + "%");
 ```
 
+TODO
+=====
+- LogLog
+- HyperLogLog++
+

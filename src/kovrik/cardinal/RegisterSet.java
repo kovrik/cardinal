@@ -5,6 +5,10 @@ import java.util.Arrays;
 /**
  * Set of registers to store counts.
  */
+
+/** TODO:
+ * - add interface
+ */
 public class RegisterSet {
 
     private final int[] registers;
@@ -19,6 +23,10 @@ public class RegisterSet {
 
     public void set(int index, int value) {
         registers[index] = value;
+    }
+
+    public int[] registers() {
+        return registers;
     }
 
     @Override
