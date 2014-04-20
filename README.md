@@ -25,6 +25,13 @@ System.out.println("Epsilon: " + epsilon + "%");
 
 TODO
 =====
-- LogLog
-- HyperLogLog++
+- Add Murmur hashing
+- implement LogLog
+- implement HyperLogLog++
+(see ["HyperLogLog in Practice: Algorithmic Engineering of a State of The Art Cardinality Estimation Algorithm" by
+Stefan Heule ETH Zurich and Google, Inc. stheule@ethz.ch
+Marc Nunkesser Google, Inc. marcnunkesser@google.com
+Alexander Hall Google, Inc. alexhall@google.com]
+(http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/pubs/archive/40671.pdf))
 
+- Optimize and clean code

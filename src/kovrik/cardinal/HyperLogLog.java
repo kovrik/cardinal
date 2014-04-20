@@ -5,9 +5,10 @@ import kovrik.cardinal.interfaces.Registers;
 
 /**
  * Cardinality estimator.
+ *
  * Basic HyperLogLog implementation.
  *
- * See http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf
+ * See http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf for more info.
  *
  * @author kovrik
  */
@@ -202,6 +203,42 @@ public final class HyperLogLog implements Cardinal {
      * Count register value.
      * @param hash
      * @return
+     *
+     * NB:
+     *
+     * 32-bit number:
+     *
+     * 0000 1001 1010 1100 1000 1011 0001 1011
+     *
+     * if we have 8 index bits and
+     * 15 value bits (for example):
+     *
+     *   not used |      value       | index
+     * 0000 1001 1|010 1100 1000 1011|0001 1011
+     *
+     * First, we do hash >>> INDEX_BITS:
+     *
+     *         not used     |      value
+     * 0000 0000 0000 1001 1|010 1100 1000 1011
+     *
+     * Second, we get value
+     * (extract N bits, where N = VALUE_BITS):
+     *
+     *         not used     |      value
+     * 0000 0000 0000 0000 0|010 1100 1000 1011
+     *
+     * Third, we count number of leading zeros:
+     *
+     *         not used     |      value
+     * 0000 0000 0000 0000 0|010 1100 1000 1011
+     * ^^^^ ^^^^ ^^^^ ^^^^ ^ ^ = 18 zeros
+     *
+     * But there are extra zeros here (`not used`).
+     * We should count only value's zeros.
+     *
+     * not_used_zeros = 32 - value_bits = 32 - 15 = 17
+     *
+     * value_zeros = 18 - 17 = 1
      */
     private static int getValue(int hash) {
         if (hash == 0) {
