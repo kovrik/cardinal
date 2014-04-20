@@ -6,7 +6,7 @@ Cardinality Estimators.
 HyperLogLog
 ============
 
-See http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf
+See [HyperLogLog: the analysis of a near-optimal cardinality estimation algorithm](http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf)
 
 Example:
 ```java
@@ -26,6 +26,7 @@ System.out.println("Epsilon: " + epsilon + "%");
 TODO
 =====
 - Add Murmur hashing
+- implement concurrent version
 - implement LogLog
-- implement HyperLogLog++ (see ["HyperLogLog in Practice: Algorithmic Engineering of a State of The Art Cardinality Estimation Algorithm"](http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/pubs/archive/40671.pdf))
+- implement HyperLogLog++ (see [HyperLogLog in Practice: Algorithmic Engineering of a State of The Art Cardinality Estimation Algorithm](http://static.googleusercontent.com/external_content/untrusted_dlcp/research.google.com/en/us/pubs/archive/40671.pdf))
 - Optimize and clean code
